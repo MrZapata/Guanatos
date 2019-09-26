@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Enroll";
+}
+
+<h2>Enroll</h2>
+
+<script type="text/javascript">
+
+    var uri = 'http://localhost:52322/api/Restaurant/Correo';
+
+    function Enroll() {
+        let _email = document.getElementById("txtEmail").value;
+
+        try {
+            $.ajax({
+                type: "POST",
+                url: uri,
+                data: JSON.stringify(_email),
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                accepts: "application/json",
+                success: function (response) {
+                    alert("Registro guadado correctamente");
+                },
+                error: function (jqXmlHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+</script>
+
+<div id="dvEnroll">
+    <table>
+        <tr>
+            <td>
+                <label> Enter your email: </label>
+            </td>
+            <td>
+                <input type="text" id="txtEmail" value="" />
+            </td>
+            <td>
+                <input type="button" id="btnEnroll" value="Enroll" onclick="Enroll();" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,90 @@
+﻿@model guanatosApp.Models.Restaurant
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<script type="text/javascript">
+
+    var uri = 'http://localhost:52322/api/Restaurant/';
+
+    function Crear() {
+        let _giro = document.getElementById("giro").value;
+        var _descripcion = document.getElementById("descripcion").value;
+        let _imagen = "";
+        let _path = document.getElementById("path").value;;
+
+        try {
+            var restaurant = {
+                giro: _giro,
+                descripcion: _descripcion,
+                imagen: _imagen,
+                path: _path
+            };
+
+            $.ajax({
+                type: "POST",
+                url: uri,
+                data: JSON.stringify(restaurant),
+                contentType: "application/json",
+                cache: "Cache-Control: no-cache",
+                accept: "*/*",
+                success: function (response) {
+                    alert("Registro guadado correctamente");
+                },
+                error: function (jqXmlHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Restaurant</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Giro, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Giro, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Giro, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Path, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" id="path" name="attach" accept=".jpg">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Create" onclick="Create();" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

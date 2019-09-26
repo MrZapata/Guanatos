@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+
+<script type="text/javascript">
+
+    var uri = 'http://localhost:52322/api/Restaurant';
+
+    function Search() {
+
+        var val = $('#txtSearch').val();
+
+        try {
+            $.ajax({
+                url: uri + '/' + val,
+                type: "get",
+                headers: {
+                    "accept": "application/json",
+                    "content-type": "application/x-www-form-urlencoded"
+                },
+                contentType: "text/json; charset=utf-8",
+                datatype: "json",
+                success: function (response) {
+                    var len = response.length;
+
+                    if ((len == undefined)) {
+                        len = 0;
+                    }
+
+                    if (len == 0) {
+                        if (response != "") {
+                            alert(response[0].descripcion)
+                        }
+                    }
+                    else {
+                        $("#tblRest").html("");
+                        var tr = '<tr><th>Giro</th><th>Descripcion</th><th>Imagen</th></tr>';
+                        $("#tblRest").append(tr)
+                        for (var i = 0; i < len; i++)
+                        {
+                            var tr = `<tr>
+                            <td>`+ response[i].giro + `</td>
+                            <td>`+ response[i].descripcion + `</td>
+                            <td></td>
+                            </tr>`;
+                            $("#tblRest").append(tr)
+                        }
+                    }
+
+                },
+                error: function (jqXmlHttpRequest, textStatus, errorThrown) {
+                    alert("Error");
+                }
+            });
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+</script>
+<div id="dvSearch">
+    <table>
+        <tr>
+            <td>
+                <label> SEARCH: </label>
+            </td>
+            <td>
+                <input type="text" id="txtSearch" value="" />
+            </td>
+            <td>
+                <input type="button" id="btnSearch" value="Search" onclick="Search();" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="dvRest">
+    <table width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000" id="tblRest"></table>
+</div>
+
+
